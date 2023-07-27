@@ -1,53 +1,54 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable, useColorScheme } from 'react-native';
+import { Tabs } from "expo-router";
+import { Platform } from "react-native";
+import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
-import Colors from '@/constants/Colors';
-
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import THEME from "@/constants/Colors";
+import { useEffect } from "react";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-      }}>
+        tabBarActiveTintColor: THEME.light.tint,
+        tabBarStyle: {
+          backgroundColor: THEME.light.background,
+        },
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="Chat"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          title: "Chats",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="chatbubble-ellipses" size={22} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="Groups"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Groups",
+          tabBarIcon: ({ color }) => (
+            <FontAwesome5 name="users" size={20} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Call"
+        options={{
+          title: "Recent",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="ios-call" size={22} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Profile"
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="person" size={22} color={color} />
+          ),
         }}
       />
     </Tabs>
