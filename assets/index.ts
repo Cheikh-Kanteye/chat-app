@@ -8,4 +8,7 @@ export const images = {
   friend: require("./images/friend.png"),
   logout: require("./images/logout.png"),
   default: require("./images/icon.png"),
+  facebook: require("./images/facebook.png"),
+  google: require("./images/google.png"),
+  pattern: require("./images/pattern.jpg"),
 };
