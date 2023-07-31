@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS } from "@/constants/Colors";
+import COLORS from "@/constants/Colors";
 import { Button } from "@/components";
 import { router } from "expo-router";
 
@@ -36,7 +36,7 @@ const Start = () => {
       <View style={{ flex: 0.23 }}>
         <Button
           label="Get Started"
-          onPress={() => router.push("/(auth)/Signup")}
+          onPress={() => router.push("/(auth)/signup")}
         />
         <Text
           style={{
@@ -48,7 +48,7 @@ const Start = () => {
         >
           Already Have an account?{" "}
           <Text
-            onPress={() => router.push("/(auth)/Signin")}
+            onPress={() => router.push("/(auth)/signin")}
             style={{ color: COLORS.primary }}
           >
             Sign in

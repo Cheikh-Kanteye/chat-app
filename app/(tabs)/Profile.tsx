@@ -1,19 +1,20 @@
 import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import THEME, { COLORS } from "@/constants/Colors";
+import COLORS from "@/constants/Colors";
 import { PROFILE_ACTIONS } from "@/utils/dummyData";
 import { images } from "@/assets";
+import { signOut } from "firebase/auth";
+import { FIREBASE_AUTH } from "@/config/firebaseConfig";
 
 const Profile = () => {
-  const theme = THEME.light;
   return (
     <View
       style={{
         flex: 1,
         paddingTop: 60,
         paddingHorizontal: 18,
-        backgroundColor: THEME.light.background,
+        backgroundColor: COLORS.white,
       }}
     >
       <View style={{ ...styles.rowBetween, height: 80 }}>
@@ -46,28 +47,28 @@ const Profile = () => {
                   <Image
                     source={item.icon}
                     resizeMode="contain"
-                    style={{ width: 18, height: 18, tintColor: theme.tint }}
+                    style={{ width: 18, height: 18, tintColor: COLORS.primary }}
                   />
                 </View>
                 <Text>{item.name}</Text>
               </View>
-              <Entypo
-                name="chevron-thin-right"
-                size={18}
-                color={theme.tabIconDefault}
-              />
+              <Entypo name="chevron-thin-right" size={18} color={COLORS.grey} />
             </View>
           );
         })}
       </View>
-      <TouchableOpacity activeOpacity={0.6} style={styles.row}>
+      <TouchableOpacity
+        onPress={() => signOut(FIREBASE_AUTH).catch((err) => console.log(err))}
+        activeOpacity={0.6}
+        style={styles.row}
+      >
         <View
           style={{ ...styles.iconContainer, backgroundColor: COLORS.lightGray }}
         >
           <Image
             source={images.logout}
             resizeMode="contain"
-            style={{ width: 20, height: 20, tintColor: theme.tint }}
+            style={{ width: 20, height: 20, tintColor: COLORS.primary }}
           />
         </View>
         <Text>Log Out</Text>

@@ -1,6 +1,6 @@
 // @ts-ignore
 import { useState } from "react";
-import { COLORS } from "@/constants/Colors";
+import COLORS from "@/constants/Colors";
 import {
   View,
   Text,
@@ -13,11 +13,30 @@ import {
 import { Button, Input } from "@/components";
 import { images } from "@/assets";
 import { router } from "expo-router";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { FIREBASE_AUTH } from "@/config/firebaseConfig";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState(null);
+  let user;
+
+  const _handleSignup = () => {
+    if (password === confirmPassword) {
+      createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
+        .then((userCredentials) => {
+          user = userCredentials.user;
+        })
+        .catch((err) => {
+          setError(err);
+          setTimeout(() => setError(null), 2000);
+        });
+    } else {
+      setError("Password doesn't match" as never);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -41,12 +60,14 @@ const Signup = () => {
             value={email}
             setValue={setEmail}
             placeholder="Enter mail"
+            error={error}
           />
           <Input
             icon="lock-closed"
             label="Password"
             secureTextEntry
             value={password}
+            error={error}
             setValue={setPassword}
             placeholder="Enter your password"
           />
@@ -54,11 +75,12 @@ const Signup = () => {
             icon="lock-closed"
             label="Confirm Password"
             secureTextEntry
+            error={error}
             value={confirmPassword}
             setValue={setConfirmPassword}
             placeholder="Confirm your password"
           />
-          <Button label="Sign in" onPress={() => null} />
+          <Button label="Sign in" onPress={_handleSignup} />
           <Text style={styles.text}>Or Connect With</Text>
           <TouchableOpacity style={styles.socialBtn}>
             <Image
@@ -80,7 +102,7 @@ const Signup = () => {
             Already have an account?{" "}
             <Text
               style={{ color: COLORS.primary }}
-              onPress={() => router.push("/(auth)/Signin")}
+              onPress={() => router.push("/(auth)/signin")}
             >
               Sign In
             </Text>

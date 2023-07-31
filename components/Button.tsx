@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import { COLORS } from "@/constants/Colors";
+import COLORS from "@/constants/Colors";
 
 interface ButtonProps {
   label: string;

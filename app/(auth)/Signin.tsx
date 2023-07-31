@@ -1,6 +1,6 @@
 // @ts-ignore
 import { useState } from "react";
-import { COLORS } from "@/constants/Colors";
+import COLORS from "@/constants/Colors";
 import {
   View,
   Text,
@@ -13,10 +13,19 @@ import {
 import { Button, Input } from "@/components";
 import { images } from "@/assets";
 import { router } from "expo-router";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { FIREBASE_AUTH } from "@/config/firebaseConfig";
+import { useAuth } from "@/utils/context";
 
 const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { user, error, signIn } = useAuth();
+  const reColor = error
+    ? COLORS.danger
+    : user
+    ? COLORS.primary
+    : COLORS.darkGrey;
 
   return (
     <View style={styles.container}>
@@ -39,7 +48,9 @@ const Signin = () => {
             label="Email"
             value={email}
             setValue={setEmail}
-            placeholder="Enter mail"
+            placeholder={"Enter mail"}
+            error={error}
+            style={{ color: reColor }}
           />
           <Input
             icon="lock-closed"
@@ -47,15 +58,17 @@ const Signin = () => {
             secureTextEntry
             value={password}
             setValue={setPassword}
-            placeholder="Enter your password"
+            placeholder={"Enter your password"}
+            error={error}
+            style={{ color: reColor }}
           />
           <Text
-            onPress={() => router.push("/(auth)/ForgotPassword")}
+            onPress={() => router.push("/(auth)/forgotPassword")}
             style={{ ...styles.text, textAlign: "right" }}
           >
             Forgot Password?
           </Text>
-          <Button label="Sign in" onPress={() => null} />
+          <Button label="Sign in" onPress={() => signIn(email, password)} />
           <Text style={styles.text}>Or Connect With</Text>
           <TouchableOpacity style={styles.socialBtn}>
             <Image
@@ -77,7 +90,7 @@ const Signin = () => {
             Don't have account?{" "}
             <Text
               style={{ color: COLORS.primary }}
-              onPress={() => router.push("/(auth)/Signup")}
+              onPress={() => router.push("/(auth)/signup")}
             >
               Sign Up
             </Text>

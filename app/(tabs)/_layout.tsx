@@ -1,22 +1,22 @@
 import { Tabs } from "expo-router";
-import { Platform } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
-import THEME from "@/constants/Colors";
-import { useEffect } from "react";
+import COLORS from "@/constants/Colors";
 
-export default function TabLayout() {
+const TabLayout = () => {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: THEME.light.tint,
+        tabBarActiveTintColor: COLORS.primary,
         tabBarStyle: {
-          backgroundColor: THEME.light.background,
+          backgroundColor: COLORS.white,
         },
+         headerShadowVisible: false, headerStyle: {backgroundColor: COLORS.white},
+         tabBarHideOnKeyboard: true
       }}
     >
       <Tabs.Screen
-        name="Chat"
+        name="chat"
         options={{
           title: "Chats",
           tabBarIcon: ({ color }) => (
@@ -25,7 +25,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Groups"
+        name="groups"
         options={{
           title: "Groups",
           tabBarIcon: ({ color }) => (
@@ -34,7 +34,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Call"
+        name="call"
         options={{
           title: "Recent",
           tabBarIcon: ({ color }) => (
@@ -43,7 +43,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Profile"
+        name="profile"
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => (
@@ -53,4 +53,7 @@ export default function TabLayout() {
       />
     </Tabs>
   );
-}
+};
+
+
+export default TabLayout

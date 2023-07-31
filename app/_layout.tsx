@@ -1,33 +1,85 @@
-import THEME from "@/constants/Colors";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { ThemeProvider } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import COLORS from "@/constants/Colors";
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack } from "expo-router";
-import { useEffect } from "react";
+import {
+  Redirect,
+  SplashScreen,
+  Stack,
+  router,
+  useRootNavigation,
+  useSegments,
+} from "expo-router";
 import * as NavBar from "expo-navigation-bar";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
+import { FIREBASE_AUTH } from "@/config/firebaseConfig";
+import { User, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import useProtectedRoute, { AuthContext } from "@/utils/context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRoute } from "@react-navigation/native";
 
 export { ErrorBoundary } from "expo-router";
 
-export const unstable_settings = {
-  initialRouteName: "(auth)",
-};
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+function RootLayoutNav() {
+  const [user, setAuth] = useState<User | null>(null); 
+  const [error, setError] = useState(null);
+
+  const _handleSignin = async (email: string, password: string) => {
+    try {
+      return await signInWithEmailAndPassword(FIREBASE_AUTH, email, password) 
+    } catch (error) {
+      setError(error as never)
+      throw error
+    }
+  };
+
+  useEffect(() => {
+    onAuthStateChanged(FIREBASE_AUTH, (currentUser) => {
+      if(currentUser){
+        setAuth(currentUser)
+      }else{
+        console.log("Something wrong!");
+      }
+    })
+  }, [])
+
+  useProtectedRoute(user)
+
+
+
+  return (
+    <AuthContext.Provider
+      value={{
+        signIn: _handleSignin,
+        signOut: () => setAuth(null),
+        user,
+        error,
+      }}
+    >
+      <Stack screenOptions={{ headerShown: false }} initialRouteName={user ? "(tabs)" : "(auth)"}  >
+        {!user ? 
+        <Stack.Screen name={"(auth)"} /> :
+        <Stack.Screen name={"(tabs)"} />
+        }
+      </Stack>
+    </AuthContext.Provider>
+  );
+}
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-    ...FontAwesome.font,
+    LatoBold: require("../assets/fonts/Lato-Bold.ttf"),
+    LatoMedium: require("../assets/fonts/Lato-Medium.ttf"),
+    LatoRegular: require("../assets/fonts/Lato-Regular.ttf"),
   });
 
   useEffect(() => {
-    if (Platform.OS == "android")
-      NavBar.setBackgroundColorAsync(THEME.light.background);
+    if (Platform.OS == "android") NavBar.setBackgroundColorAsync(COLORS.white);
   }, []);
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+  
   useEffect(() => {
     if (error) throw error;
   }, [error]);
@@ -42,14 +94,7 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return <RootLayoutNav/>;
 }
 
-function RootLayoutNav() {
-  return (
-    <Stack>
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-    </Stack>
-  );
-}
+
