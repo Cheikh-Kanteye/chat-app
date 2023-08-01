@@ -25,7 +25,7 @@ export default function useProtectedRoute(user: User | null) {
     if (!user && !inAuthGroup) { 
       router.replace("/start");
     } else if (user) { 
-      router.replace("/chat");
+      router.replace("/(tabs)");
     }
   }, [user, segments]);
 }

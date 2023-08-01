@@ -11,12 +11,16 @@ const TabLayout = () => {
         tabBarStyle: {
           backgroundColor: COLORS.white,
         },
-         headerShadowVisible: false, headerStyle: {backgroundColor: COLORS.white},
-         tabBarHideOnKeyboard: true
+        headerShadowVisible: false,
+        headerStyle: { backgroundColor: COLORS.white },
+        tabBarHideOnKeyboard: true,
+        headerTitleStyle: {
+          fontFamily: "LatoBold",
+        },
       }}
     >
       <Tabs.Screen
-        name="chat"
+        name="index"
         options={{
           title: "Chats",
           tabBarIcon: ({ color }) => (
@@ -55,5 +59,4 @@ const TabLayout = () => {
   );
 };
 
-
-export default TabLayout
+export default TabLayout;

@@ -6,6 +6,7 @@ import { PROFILE_ACTIONS } from "@/utils/dummyData";
 import { images } from "@/assets";
 import { signOut } from "firebase/auth";
 import { FIREBASE_AUTH } from "@/config/firebaseConfig";
+import { router } from "expo-router";
 
 const Profile = () => {
   return (
@@ -58,7 +59,7 @@ const Profile = () => {
         })}
       </View>
       <TouchableOpacity
-        onPress={() => signOut(FIREBASE_AUTH).catch((err) => console.log(err))}
+        onPress={() => signOut(FIREBASE_AUTH).then(() => {alert("Log out"); router.replace("/signin")}).catch((err) => console.log(err))}
         activeOpacity={0.6}
         style={styles.row}
       >

@@ -1,3 +1,4 @@
+//@ts-ignore
 import React, { useEffect, useState } from "react";
 import COLORS from "@/constants/Colors";
 import { useFonts } from "expo-font";
@@ -13,9 +14,7 @@ import * as NavBar from "expo-navigation-bar";
 import { Platform, View } from "react-native";
 import { FIREBASE_AUTH } from "@/config/firebaseConfig";
 import { User, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
-import useProtectedRoute, { AuthContext } from "@/utils/context";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRoute } from "@react-navigation/native";
+import useProtectedRoute, { AuthContext } from "@/utils/context"; 
 
 export { ErrorBoundary } from "expo-router";
 
@@ -39,13 +38,12 @@ function RootLayoutNav() {
     onAuthStateChanged(FIREBASE_AUTH, (currentUser) => {
       if(currentUser){
         setAuth(currentUser)
-      }else{
-        console.log("Something wrong!");
-      }
+        router.replace("/(tabs)")
+      } 
     })
   }, [])
 
-  useProtectedRoute(user)
+  // useProtectedRoute(user)
 
 
 
